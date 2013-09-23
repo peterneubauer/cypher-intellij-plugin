@@ -1,0 +1,1 @@
+== A Cypher sytax highlighting plugin for Intellij
