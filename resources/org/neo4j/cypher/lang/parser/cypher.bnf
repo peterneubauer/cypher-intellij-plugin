@@ -1,0 +1,16 @@
+{
+  parserUtilClass="org.neo4j.cypher.lang.parser.CypherParserUtil"
+  parserClass="org.neo4j.cypher.lang.parser.CypherParser"
+  psiPackage="org.neo4j.cypher.lang.psi"
+  psiImplPackage="org.neo4j.cypher.lang.psi.impl"
+  elementTypeHolderClass="org.neo4j.cypher.lang.parser.CypherParserTypes"
+
+    tokens = [
+        identifier='regexp:\p{Alpha}\w*'
+    ]
+}
+
+chyper ::= start_clause
+start_clause ::= "start" bind_nodes "return" return_nodes
+private bind_nodes ::= identifier "=" identifier
+private return_nodes ::= identifier
