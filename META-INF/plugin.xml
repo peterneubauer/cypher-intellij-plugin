@@ -43,6 +43,8 @@
 
         <languageInjector implementation="org.neo4j.cypher.lang.injector.CypherLanguageInjector"/>
         <fileTypeFactory implementation="org.neo4j.cypher.CypherFileTypeFactory"/>
+        <lang.syntaxHighlighterFactory key="CYPHER_LANGUAGE_ID"
+                                       implementationClass="org.neo4j.cypher.lang.CypherSyntaxHighlighterFactory"/>
         <!-- Add your extensions here -->
     </extensions>
 </idea-plugin>
