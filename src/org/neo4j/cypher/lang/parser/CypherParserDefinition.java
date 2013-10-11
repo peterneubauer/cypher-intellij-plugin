@@ -5,18 +5,17 @@ import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.TokenType;
+import com.intellij.psi.*;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
-import org.neo4j.cypher.lang.lexer.CypherFileElementType;
+import org.neo4j.cypher.lang.CypherLanguage;
 import org.neo4j.cypher.lang.lexer.CypherLexer;
 import org.neo4j.cypher.lang.psi.CypherFile;
 
 public class CypherParserDefinition implements ParserDefinition {
+    public static IFileElementType CYPHER_FILE_ELEMENT_TYPE = new IFileElementType(CypherLanguage.CYPHER_LANGUAGE);
+
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
@@ -30,7 +29,7 @@ public class CypherParserDefinition implements ParserDefinition {
 
     @Override
     public IFileElementType getFileNodeType() {
-        return CypherFileElementType.CYPHER_FILE_ELEMENT_TYPE;
+        return CYPHER_FILE_ELEMENT_TYPE;
     }
 
     @NotNull
@@ -42,7 +41,10 @@ public class CypherParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public TokenSet getCommentTokens() {
-        return TokenSet.create(TokenType.WHITE_SPACE);
+        return TokenSet.create(
+                JavaTokenType.C_STYLE_COMMENT,
+                JavaTokenType.END_OF_LINE_COMMENT
+                );
     }
 
     @NotNull

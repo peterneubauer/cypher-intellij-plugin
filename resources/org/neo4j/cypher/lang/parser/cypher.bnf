@@ -1,16 +1,47 @@
 {
   parserUtilClass="org.neo4j.cypher.lang.parser.CypherParserUtil"
   parserClass="org.neo4j.cypher.lang.parser.CypherParser"
+  parserImports=[
+          "static org.neo4j.cypher.lang.parser.CypherParserTypes.*"
+  ]
+
   psiPackage="org.neo4j.cypher.lang.psi"
   psiImplPackage="org.neo4j.cypher.lang.psi.impl"
   elementTypeHolderClass="org.neo4j.cypher.lang.parser.CypherParserTypes"
 
-    tokens = [
-        identifier='regexp:\p{Alpha}\w*'
-    ]
+  tokenTypeClass="org.neo4j.cypher.lang.psi.CypherTokeType"
+
+  tokens=[
+    CREATE="CREATE"
+    CONSTRAINT="CONSTRAINT"
+    ASSERT="ASSERT"
+    ON="ON"
+    LPAR="("
+    RPAR=")"
+    IS="IS"
+    UNIQUE="UNIQUE"
+
+    //literals
+    ID="regexp:\p{Alpha}\w*"
+    COLON=":"
+    DOT="."
+  ]
 }
 
-chyper ::= start_clause
-start_clause ::= "start" bind_nodes "return" return_nodes
-private bind_nodes ::= identifier "=" identifier
-private return_nodes ::= identifier
+chyper ::= command //| query
+command ::= CreateUniqueConstraint //| CreateIndex | DropUniqueConstraint | DropIndex
+CreateUniqueConstraint ::= CREATE CONSTRAINT ON LPAR ID  NodeLabel RPAR ASSERT? ID DOT ID IS UNIQUE
+NodeLabel ::= COLON ID
+
+//query ::=
+
+
+// LITERALS
+// org.neo4j.cypher.internal.parser.v2_0.rules.Literals
+
+
+
+/*operator ::= math_op | comparison_op | boolean_op | ("|^&!:~")+
+private math_op ::= "+" | "-" | "*" | "/" | "%"
+private comparison_op ::= "=" | "<>" | "<" | ">" | "<=" | ">="
+private boolean_op ::= "AND" | "OR" | "XOR" | "NOT"*/

@@ -42,6 +42,7 @@
                 implementationClass="org.neo4j.cypher.lang.parser.CypherParserDefinition"/>
 
         <languageInjector implementation="org.neo4j.cypher.lang.injector.CypherLanguageInjector"/>
+        <fileTypeFactory implementation="org.neo4j.cypher.CypherFileTypeFactory"/>
         <!-- Add your extensions here -->
     </extensions>
 </idea-plugin>
