@@ -20,6 +20,8 @@
     RPAR=")"
     IS="IS"
     UNIQUE="UNIQUE"
+    INDEX="INDEX"
+    DROP="DROP"
 
     //literals
     ID="regexp:\p{Alpha}\w*"
@@ -29,8 +31,14 @@
 }
 
 chyper ::= command //| query
-command ::= CreateUniqueConstraint //| CreateIndex | DropUniqueConstraint | DropIndex
-CreateUniqueConstraint ::= CREATE CONSTRAINT ON LPAR ID  NodeLabel RPAR ASSERT? ID DOT ID IS UNIQUE
+command ::= CreateUniqueConstraint |DropUniqueConstraint | CreateIndex | DropIndex
+DropUniqueConstraint ::= DROP constraintSyntax
+CreateUniqueConstraint ::= CREATE constraintSyntax
+constraintSyntax ::= CONSTRAINT ON LPAR ID NodeLabel RPAR ASSERT? ID DOT ID IS UNIQUE
+
+CreateIndex ::= CREATE INDEX ON NodeLabel LPAR ID RPAR
+DropIndex ::= DROP INDEX ON NodeLabel LPAR ID RPAR
+
 NodeLabel ::= COLON ID
 
 //query ::=

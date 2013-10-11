@@ -8,7 +8,8 @@ public interface CypherTokenTypes {
             CypherParserTypes.ASSERT,
             CypherParserTypes.CONSTRAINT,
             CypherParserTypes.CREATE,
-            CypherParserTypes.CREATE,
+            CypherParserTypes.DROP,
+            CypherParserTypes.INDEX,
             CypherParserTypes.IS,
             CypherParserTypes.ON,
             CypherParserTypes.UNIQUE
