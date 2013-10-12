@@ -15,22 +15,49 @@
     CREATE="CREATE"
     CONSTRAINT="CONSTRAINT"
     ASSERT="ASSERT"
+    NODE="NODE"
+    RETURN="RETURN"
+    DISTINCT="DISTINCT"
     ON="ON"
     LPAR="("
     RPAR=")"
+    LBRACE="{"
+    RBRACE="}"
     IS="IS"
     UNIQUE="UNIQUE"
     INDEX="INDEX"
     DROP="DROP"
+    START="START"
+    WHERE="WHERE"
+    COMMA=","
+    WHEN="WHEN"
+    THEN="THEN"
+    CASE="CASE"
+    ELSE="ELSE"
+    END="END"
+    OR="OR"
+    AND="AND"
+    XOR="XOR"
+    NOT="NOT"
 
     //literals
     ID="regexp:\p{Alpha}\w*"
+    DECIMAL="regexp:[+-]?(([1-9]\d+)|([0-9]))\.\d+"
+    INTEGER="regexp:[+-]?(([1-9]\d+)|([0-9]))"
+    STRING="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
     COLON=":"
     DOT="."
+    EQ="="
+    LT="<"
+    PLUS="+"
+    MINUS="-"
+    MUL="*"
   ]
 }
 
-chyper ::= command //| query
+chyper ::= command | query
+
+//==================== command start ===========================================
 command ::= CreateUniqueConstraint |DropUniqueConstraint | CreateIndex | DropIndex
 DropUniqueConstraint ::= DROP constraintSyntax
 CreateUniqueConstraint ::= CREATE constraintSyntax
@@ -38,6 +65,62 @@ constraintSyntax ::= CONSTRAINT ON LPAR ID NodeLabel RPAR ASSERT? ID DOT ID IS U
 
 CreateIndex ::= CREATE INDEX ON NodeLabel LPAR ID RPAR
 DropIndex ::= DROP INDEX ON NodeLabel LPAR ID RPAR
+//==================== command end ===========================================
+
+
+//===================== start clause ==========================================
+query ::= SingleQuery //Union*
+private SingleQuery ::= Clause+
+private Clause ::= StartClause | ReturnClause //| Match | Merge | Create | SetClause | Delete | Remove | Foreach | With
+StartClause ::= START StartPoint (COMMA StartPoint)* WhereRestriction?
+private StartPoint ::=   ID EQ Lookup
+// TODO: not all cases
+private Lookup ::=  NodeLookup
+//todo: not all cases
+NodeLookup ::=  NODE NodeIdLookup
+NodeIdLookup ::= LPAR (MUL | Parameter | LiteralIds) RPAR
+private LiteralIds ::= INTEGER (COMMA INDEX)*
+private WhereRestriction ::= WHERE Expression
+//=============================================================================
+
+
+//===================== return clause  ==========================================
+ReturnClause ::=  RETURN DISTINCT? ReturnBody
+// todo: not all cases
+ReturnBody ::= ReturnItems
+private ReturnItems ::= MUL | ReturnItem (COMMA ReturnItem)*
+ReturnItem ::= Expression // todo: not all cases
+//===============================================================================
+
+
+//===================== expressions end   ==========================================
+// general expression that is used everywhere
+Expression ::= Expression14
+private Expression14 ::= Expression13 (OR ID Expression13)*
+private Expression13 ::= Expression12 (XOR ID Expression12)*
+private Expression12 ::= Expression11 (AND ID Expression11)*
+private Expression11 ::= Expression10
+private Expression10 ::= (NOT ID Expression9) | Expression9
+//TODO: not all cases
+private Expression9 ::= Expression8 (EQ ID Expression8)*
+//TODO: not all cases
+private Expression8 ::= Expression7 (LT ID Expression7)*
+private Expression7 ::= Expression6
+private Expression6 ::= Expression5 ( (PLUS|MINUS) ID Expression5)*
+// todo : not all cases
+private Expression5 ::= Expression4 (MUL ID Expression4)*
+// todo: not all cases
+private Expression4 ::= Expression3
+//todo: not all cases
+private Expression3 ::= Expression2
+// todo: not all cases
+Expression2 ::= DECIMAL | INTEGER | STRING | Parameter | CaseExpression | ID
+Parameter ::= LBRACE (ID | INTEGER ) LBRACE
+
+// TODO: Not all cases what is push(None) and (Some(_))
+CaseExpression ::= CASE Expression? CaseAlternatives+ (ELSE Expression)? END
+CaseAlternatives ::= WHEN Expression THEN Expression
+//===================== expressions end   ==========================================
 
 NodeLabel ::= COLON ID
 

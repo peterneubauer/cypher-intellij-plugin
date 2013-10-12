@@ -12,7 +12,20 @@ public interface CypherTokenTypes {
             CypherParserTypes.INDEX,
             CypherParserTypes.IS,
             CypherParserTypes.ON,
-            CypherParserTypes.UNIQUE
+            CypherParserTypes.UNIQUE,
+            CypherParserTypes.START,
+            CypherParserTypes.NODE,
+            CypherParserTypes.RETURN,
+            CypherParserTypes.WHERE,
+            CypherParserTypes.WHEN,
+            CypherParserTypes.THEN,
+            CypherParserTypes.CASE,
+            CypherParserTypes.ELSE,
+            CypherParserTypes.END,
+            CypherParserTypes.OR,
+            CypherParserTypes.AND,
+            CypherParserTypes.XOR,
+            CypherParserTypes.NOT
     );
 
 }
