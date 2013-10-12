@@ -11,6 +11,6 @@ import com.intellij.lexer.FlexAdapter;
  */
 public class CypherLexer extends FlexAdapter {
     public CypherLexer() {
-        super(new _CypherLexer());
+        super(new _Cypher());
     }
 }
